@@ -53,12 +53,16 @@ int counterParsePLC = 5;
 bool resivingPLCData = false;
 // End variables function parsePLC
 
+
+
 void setup() {
  timerParsePLC = millis();
  moveTimer = micros();
+ Serial.begin(9600);
 }
 
 void loop() {
+  transferDriverPosition();
   if (micros() - moveTimer < 0){
     moveTimer = micros();
   }
@@ -78,6 +82,7 @@ void loop() {
       startMove = false;
       counterAuto = 0;
     }
+    
   } else {
     digitalWrite(driverReadyToMove, HIGH); 
     int buttonsActive = (digitalRead(buttonMotorForwardX) == HIGH) ? 1 : 0
@@ -121,28 +126,31 @@ void loop() {
         countStep[i] *= 0;
       }
     }
+    
   }
 }
 
 void move(int indexMotor, bool reverse) {
-  if (micros() - moveTimer > 250000/motorFrequency){
-    digitalWrite(pinsMotors[indexMotor][3], motorsValues[moveCounter[indexMotor]][0]);
-    digitalWrite(pinsMotors[indexMotor][2], motorsValues[moveCounter[indexMotor]][1]);
-    digitalWrite(pinsMotors[indexMotor][1], motorsValues[moveCounter[indexMotor]][2]);
-    digitalWrite(pinsMotors[indexMotor][0], motorsValues[moveCounter[indexMotor]][3]);
-    moveTimer = micros();
-    if (reverse){
-      moveCounter[indexMotor]--;
-      if (moveCounter[indexMotor] < 0){
-      moveCounter[indexMotor] = 3;
-      countStep[indexMotor]--;
+  if (countStep[indexMotor] >= 0) {
+    if (micros() - moveTimer > 250000/motorFrequency){
+      digitalWrite(pinsMotors[indexMotor][3], motorsValues[moveCounter[indexMotor]][0]);
+      digitalWrite(pinsMotors[indexMotor][2], motorsValues[moveCounter[indexMotor]][1]);
+      digitalWrite(pinsMotors[indexMotor][1], motorsValues[moveCounter[indexMotor]][2]);
+      digitalWrite(pinsMotors[indexMotor][0], motorsValues[moveCounter[indexMotor]][3]);
+      moveTimer = micros();
+      if (reverse){
+        moveCounter[indexMotor]--;
+        if (moveCounter[indexMotor] < 0){
+        moveCounter[indexMotor] = 3;
+        countStep[indexMotor]--;
+        }
       }
-    }
-    else {
-      moveCounter[indexMotor]++;
-      if (moveCounter[indexMotor] > 3){
-        moveCounter[indexMotor] = 0;
-        countStep[indexMotor]++;
+      else {
+        moveCounter[indexMotor]++;
+        if (moveCounter[indexMotor] > 3){
+          moveCounter[indexMotor] = 0;
+          countStep[indexMotor]++;
+        }
       }
     }
   }
@@ -204,6 +212,49 @@ void parsePLC() {
         }
       }
       resivingPLCData = false;
+    }
+  }
+}
+
+
+bool transferingDriverData = false;
+int counterMotorsPositions = 0;
+int counterDecToBin = 0;
+int bin = 65536;
+unsigned int dec = 0;
+int transferTimer = 0 ;
+int transferDelay = 1;
+
+void transferDriverPosition() {
+  if (transferingDriverData == false){
+    transferingDriverData = true;
+    digitalWrite(SerialForPLC, 1);
+    dec = countStep[counterMotorsPositions];
+    transferTimer = millis();
+  }
+  if(transferingDriverData == true){
+    if(millis() - transferTimer >= transferDelay/9600){
+      if(dec >= bin){
+        digitalWrite(SerialForPLC,1);
+        dec -= bin;
+      }
+      else {
+        digitalWrite(SerialForPLC,0);
+      }
+      bin/=2;
+      counterDecToBin++;
+      transferTimer = millis();
+    }
+    if (counterDecToBin == 16){
+      counterMotorsPositions++;
+      dec = countStep[counterMotorsPositions];
+      bin = 65536;
+    }
+    if (counterMotorsPositions == 4){
+      transferingDriverData = false;
+      counterDecToBin = 0;
+      counterMotorsPositions = 0;
+      bin = 65536;
     }
   }
 }
