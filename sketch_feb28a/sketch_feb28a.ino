@@ -157,6 +157,7 @@ void move(int indexMotor, bool reverse) {
 }
 
 void moveToHome() {
+  digitalWrite(driverReadyToMove, LOW);
   while (true) {
     if (digitalRead(sensorMaxX) == 0) {
       move(0, true);
@@ -174,6 +175,7 @@ void moveToHome() {
       break;
     }
   }
+  digitalWrite(driverReadyToMove, HIGH);
 }
 
 int booferPLCData = 0;
