@@ -7,14 +7,14 @@
 #define buttonMotorBackwardY 26//
 #define buttonMotorBackwardW 27//
 #define buttonMotorBackwardE 28//
-#define buttonResetPosition 29//
+#define buttonResetPosition 14//
 #define driverReadyToMove 20//
 #define SerialForPLC 15//
 #define sensorMaxX 16//
 #define sensorMaxY 18//
 #define sensorMaxW 19//
 #define dataPLC 17//
-#define motorFrequency 3000
+#define motorFrequency 412
 int pinsMotors[4][4] = {
   { 33, 34, 35, 36 },
   { 37, 38, 39, 40 },
@@ -59,6 +59,31 @@ void setup() {
  timerParsePLC = millis();
  moveTimer = micros();
  Serial.begin(9600);
+ pinMode(21,INPUT);
+ pinMode(22,INPUT);
+ pinMode(23,INPUT);
+ pinMode(24,INPUT);
+ pinMode(25,INPUT);
+ pinMode(26,INPUT);
+ pinMode(27,INPUT);
+ pinMode(28,INPUT);
+ pinMode(14,INPUT);
+ pinMode(33,OUTPUT);
+ pinMode(34,OUTPUT);
+ pinMode(35,OUTPUT);
+ pinMode(36,OUTPUT);
+ pinMode(37,OUTPUT);
+ pinMode(38,OUTPUT);
+ pinMode(39,OUTPUT);
+ pinMode(40,OUTPUT);
+ pinMode(1,OUTPUT);
+ pinMode(2,OUTPUT);
+ pinMode(3,OUTPUT);
+ pinMode(4,OUTPUT);
+ pinMode(5,OUTPUT);
+ pinMode(6,OUTPUT);
+ pinMode(7,OUTPUT);
+ pinMode(8,OUTPUT);
 }
 
 void loop() {
