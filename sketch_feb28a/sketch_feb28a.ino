@@ -91,7 +91,7 @@ void loop() {
   if (micros() - moveTimer < 0){
     moveTimer = micros();
   }
-  parsePLC();
+  //parsePLC();
   if (startMove) {
     digitalWrite(driverReadyToMove, LOW);
     if (manipulatorPosition[position][counterAuto] < countStep[counterAuto]) {
