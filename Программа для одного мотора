@@ -1,0 +1,153 @@
+int in1 = 11;
+int in2 = 10;
+int in3 = 9;
+int in4 = 8;
+const int dl = 5;
+bool flagButtonForword = false;
+bool flagButtonBackword = false;
+uint32_t btnTimer = 0;
+
+void setup() {
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  Serial.begin(9600);
+  pinMode(7, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
+}
+
+void loop() {
+  bool btnStateForword = digitalRead(7);  
+  if (btnStateForword == HIGH && millis() - btnTimer > 100) {
+    flagButtonForword = !flagButtonForword;
+    btnTimer = millis();
+  }
+  if (flagButtonForword == 1) {
+    movieForword();
+  }
+  bool btnStateBackword = digitalRead(5);  
+  if (btnStateBackword == HIGH && millis() - btnTimer > 100) {
+    flagButtonBackword = !flagButtonBackword;
+    btnTimer = millis();
+  }
+  if (flagButtonBackword == 1) {
+    movieBackword();
+  }
+}
+
+void movieForword() {
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+
+  delay(dl);
+
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+
+  delay(dl);
+
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+
+  delay(dl);
+
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+
+  delay(dl);
+
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+
+  delay(dl);
+
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, HIGH);
+
+  delay(dl);
+
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+
+  delay(dl);
+
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+
+  delay(dl);
+}
+
+void movieBackword() {
+  digitalWrite(in4, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in1, LOW);
+
+  delay(dl);
+
+  digitalWrite(in4, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in1, LOW);
+
+  delay(dl);
+
+  digitalWrite(in4, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in1, LOW);
+
+  delay(dl);
+
+  digitalWrite(in4, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in1, LOW);
+
+  delay(dl);
+
+  digitalWrite(in4, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in1, LOW);
+
+  delay(dl);
+
+  digitalWrite(in4, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in1, HIGH);
+
+  delay(dl);
+
+  digitalWrite(in4, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in1, HIGH);
+
+  delay(dl);
+
+  digitalWrite(in4, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in1, HIGH);
+
+  delay(dl);
+}
